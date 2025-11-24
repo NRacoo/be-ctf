@@ -1,5 +1,5 @@
 
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { UserDto } from "../dto/user-dto";
 
@@ -17,5 +17,11 @@ export class UserController{
     @Get()
     async findAll(){
         return this.userService.GetAllUser()
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get()
+    async findByUsername(@Query("username") data:UserDto){
+        return this.userService.GetUserByUsername(data)
     }
 }

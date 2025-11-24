@@ -48,4 +48,15 @@ export class UserService{
             }
         })
     }
+    async GetUserByUsername(data: UserDto){
+        const { username } = data
+        if(!username){
+            throw new BadRequestException("user tidak ditemukan")
+        }
+        return this.prisma.user.findUnique(
+            {
+                where: { username }
+            }
+        )
+    }
 }

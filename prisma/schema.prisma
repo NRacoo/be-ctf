@@ -58,7 +58,7 @@ model Solve {
 
 model Admin{
   id String @id @default(cuid())
-  username String
+  username String @unique
   password String
   role ROLE @default(admin)
 }

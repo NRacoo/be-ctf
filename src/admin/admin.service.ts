@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { AdminDto } from '../dto/admin-dto';
+import { AdminDto } from './dto/admin-dto';
 
 @Injectable()
 export class AdminService {

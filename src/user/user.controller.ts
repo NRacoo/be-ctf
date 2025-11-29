@@ -1,7 +1,7 @@
 
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { UserDto } from "../dto/user-dto";
+import { UserDto } from "./dto/user-dto";
 
 @Controller("users")
 export class UserController{
@@ -14,14 +14,21 @@ export class UserController{
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get()
+    @Get("leaderboard")
     async findAll(){
-        return this.userService.GetAllUser()
+        return this.userService.LeaderBoard()
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get()
-    async findByUsername(@Query("username") data:UserDto){
-        return this.userService.GetUserByUsername(data)
+    @Get("user")
+    async findByUsername(@Query("username") username:string){
+        return this.userService.GetUserByUsername(username)
     }
+    @HttpCode(HttpStatus.OK)
+    @Get()
+    async getUser(){
+        return this.userService.GetAllUser()
+    }
+
+    
 }

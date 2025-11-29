@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus, Query } from '@nestjs/common';
-import { AdminDto } from '../dto/admin-dto';
+import { AdminDto } from './dto/admin-dto';
 import { AdminService } from './admin.service';
 
 @Controller('admin')

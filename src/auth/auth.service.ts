@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { UserService } from "../user/user.service";
 import { JwtService } from "@nestjs/jwt";
-import {  UserDto } from "../dto/user-dto";
-import { AdminDto } from "src/dto/admin-dto";
+import {  UserDto } from "../user/dto/user-dto";
+import { AdminDto } from "src/admin/dto/admin-dto";
 import * as bcrypt from "bcrypt"
 import { AdminService } from "../admin/admin.service";
 

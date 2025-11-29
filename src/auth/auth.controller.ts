@@ -1,8 +1,8 @@
 import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Post, Request, Res, UseGuards} from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { UserDto } from "../dto/user-dto";
+import { UserDto } from "../user/dto/user-dto";
 import { AuthGuard } from "./auth.guard";
-import { AdminDto } from "../dto/admin-dto";
+import { AdminDto } from "../admin/dto/admin-dto";
 import { AdminGuard } from "./admin.guard";
 
 

@@ -1,12 +1,16 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { UserDto } from "src/dto/user-dto";
+import { UserDto } from "src/user/dto/user-dto";
 import * as bcrypt from "bcrypt"
 import { DatabaseService } from "../database/database.service";
+import { LeaderboardGateway } from "../gateway/leaderboard.gateway";
 
 @Injectable()
 
 export class UserService{
-    constructor(private  prisma : DatabaseService) {}
+    constructor(
+        private  prisma : DatabaseService,
+        private  gateway: LeaderboardGateway
+    ) {}
 
     async FindUser(username :string){
         if(!username)throw new BadRequestException("user harus diisi")
@@ -38,7 +42,7 @@ export class UserService{
         });
     }
     async GetAllUser(){
-        return this.prisma.user.findMany({
+        const result = await this.prisma.user.findMany({
             select:{
                 id:true,
                 username:true,
@@ -47,16 +51,36 @@ export class UserService{
                 createdAt:true
             }
         })
+        return { message: "berhasil" , data:result}
     }
-    async GetUserByUsername(data: UserDto){
-        const { username } = data
-        if(!username){
-            throw new BadRequestException("user tidak ditemukan")
-        }
-        return this.prisma.user.findUnique(
+    async GetUserByUsername(username:string){
+        const result = await this.prisma.user.findUnique(
             {
-                where: { username }
+                where: { username : username}
             }
         )
+        return {message:"berhasil", data:result}
+    }
+    async LeaderBoard(){
+        const data = await this.prisma.user.findMany(
+            {
+                select:{ id : true, username: true, score: true, lastSolve:true, solves:{select:{createdAt: true}}},
+                orderBy:[
+                    {score : 'desc'},
+                ]
+            }
+        )
+         const leaderboard = data.map((u, index) => ({
+            id: u.id,
+            username: u.username,
+            score: u.score,
+            solves: u.solves.length,
+            lastSolve: u.solves.length > 0 
+            ? u.solves[u.solves.length - 1].createdAt 
+            : null,
+            rank: index + 1,
+        }))
+        this.gateway.broadcastLeaderboard(leaderboard)
+        return leaderboard
     }
 }
